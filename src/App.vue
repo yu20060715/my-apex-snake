@@ -93,10 +93,9 @@
               <button class="btn btn-start" @click="startGame">{{ lang('restart') }}</button>
             </div>
 
-          </div>
-
-          <div class="joy-section">
-            <div id="joystick-zone" :class="['joystick-ctrl', { disabled: controlMode === 'wasd' }]"></div>
+            <div class="joy-section">
+              <div id="joystick-zone" :class="['joystick-ctrl', { disabled: controlMode === 'wasd' }]"></div>
+            </div>
           </div>
         </div>
         </div>
@@ -758,7 +757,7 @@ export default {
           mode: 'static',
           position: { left: '50%', top: '50%' },
           color: 'cyan',
-          size: 120,
+          size: 100,
           restOpacity: 0.9
         })
         this.nippleInstance.on('move', (evt, data) => {
@@ -846,7 +845,6 @@ export default {
 .game-column { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
 .game-wrapper {
-  position: relative;
   padding: 4px;
   border-radius: 12px;
   background: linear-gradient(270deg, #f0c, #33f, #0fc, #f0c, #33f, #0fc, #f0c);
@@ -1042,9 +1040,8 @@ export default {
 
 .joystick-ctrl {
   position: absolute;
-  right: -80px;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 12px;
+  bottom: 12px;
   width: 140px;
   height: 140px;
   z-index: 5;
@@ -1061,7 +1058,7 @@ export default {
 @media (max-width: 1100px) {
   .side-panel { display: none; }
   .game-row { flex-direction: column; }
-  .joystick-ctrl { width: 100px; height: 100px; top: auto; transform: none; right: 12px; bottom: 12px; }
+  .joystick-ctrl { width: 100px; height: 100px; }
   .mobile-hud {
     display: flex;
     position: absolute;
