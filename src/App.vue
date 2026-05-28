@@ -41,6 +41,13 @@
           <div class="canvas-wrap">
             <canvas ref="gameCanvas" width="960" height="720"></canvas>
 
+            <div class="mobile-hud">
+              <span class="mh-hp">
+                <span v-for="i in maxHp" :key="i">{{ i <= hp ? '❤️' : '🖤' }}</span>
+              </span>
+              <span class="mh-score">{{ score }}</span>
+            </div>
+
             <div v-if="gameState === 'menu'" class="overlay">
               <button class="btn-lang" @click="toggleLang">
                 {{ currentLang === 'zh' ? 'English' : '中文' }}
@@ -832,6 +839,8 @@ export default {
 .sp-lb-row { display: flex; align-items: center; gap: 6px; font-size: 13px; }
 .sp-lb-rank { font-size: 13px; width: 20px; text-align: center; }
 .sp-lb-score { color: #ff0; font-weight: 700; }
+
+.mobile-hud { display: none; }
 .sp-best { color: #f80; font-size: 12px; }
 .sp-empty { font-size: 11px; color: #456; }
 .game-column { flex: 1; min-width: 0; display: flex; flex-direction: column; }
@@ -1033,8 +1042,9 @@ export default {
 
 .joystick-ctrl {
   position: absolute;
-  right: -255px;
-  bottom: calc(14% - 35px);
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 140px;
   height: 140px;
   z-index: 5;
@@ -1048,9 +1058,23 @@ export default {
   pointer-events: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1100px) {
   .side-panel { display: none; }
   .game-row { flex-direction: column; }
-  .joystick-ctrl { width: 100px; height: 100px; right: -185px; bottom: calc(10% - 25px); }
+  .joystick-ctrl { width: 100px; height: 100px; top: auto; transform: none; right: 12px; bottom: 12px; }
+  .mobile-hud {
+    display: flex;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 6;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 4px 10px;
+    border-radius: 6px;
+    align-items: center;
+  }
+  .mh-hp { font-size: 16px; }
+  .mh-score { color: #0ff; font-weight: 700; font-size: 13px; }
 }
 </style>
