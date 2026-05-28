@@ -868,6 +868,7 @@ export default {
   width: 100%;
   height: 100%;
   display: block;
+  touch-action: none;
 }
 
 .overlay {
@@ -1062,6 +1063,11 @@ export default {
   .game-wrapper { box-sizing: border-box; }
   .canvas-wrap { height: 100%; aspect-ratio: auto; }
   .canvas-wrap canvas { object-fit: contain; }
+  .overlay { justify-content: flex-start; padding: 12px; gap: 8px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .overlay .rules-list { display: none; }
+  .overlay h1 { font-size: clamp(20px, 6vw, 32px); }
+  .overlay .btn { padding: 8px 24px; font-size: 14px; }
+  .overlay .btn-lang { top: 8px; right: 8px; padding: 4px 10px; font-size: 11px; }
   .joystick-ctrl { width: 100px; height: 100px; }
   .mobile-hud {
     display: flex;
