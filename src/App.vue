@@ -175,7 +175,7 @@ export default {
     lang(key) {
       const dict = {
         zh: {
-          title: 'APEX 蛇',
+          title: 'Snakes & Ghosts',
           rules: [
             '❤️ 血量：左上角愛心，共 6 顆，被幽靈撞到會扣血',
             '🍎 食物：金色光球，+10 分、加速、蛇身變長',
@@ -211,7 +211,7 @@ export default {
           ]
         },
         en: {
-          title: 'APEX SNAKE',
+          title: 'Snakes & Ghosts',
           rules: [
             '❤️ HP: Top-left hearts, 6 total. Ghosts deal 1 damage',
             '🍎 Food: Gold orbs, +10 score, speed up, body grows',
