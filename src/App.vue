@@ -1055,9 +1055,13 @@ export default {
   pointer-events: none;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
   .side-panel { display: none; }
-  .game-row { flex-direction: column; }
+  .game-row { flex-direction: column; height: 100dvh; }
+  .game-column, .game-wrapper { height: 100%; min-height: 0; }
+  .game-wrapper { box-sizing: border-box; }
+  .canvas-wrap { height: 100%; aspect-ratio: auto; }
+  .canvas-wrap canvas { object-fit: contain; }
   .joystick-ctrl { width: 100px; height: 100px; }
   .mobile-hud {
     display: flex;
