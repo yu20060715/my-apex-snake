@@ -130,7 +130,7 @@ export default {
       maxSpeed: 5,
       hp: 6,
       maxHp: 6,
-      controlMode: 'wasd',
+      controlMode: ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'joystick' : 'wasd',
       snake: [],
       foods: [],
       joystickAngle: 0,
@@ -188,7 +188,7 @@ export default {
             '👻 幽靈：藍圓巡邏、紅三角追擊、紫菱預判，撞到扣 1 HP',
             '🛡️ 護盾：藍色道具，彈開幽靈一次，持續 5 秒',
             '💚 補血：綠色十字，會逃跑，+1 HP',
-            '⚡ 尖刺：四角陷阱，-15 分、截尾 3 節',
+            '⚡ 四角落：四角陷阱，-15 分、截尾 3 節',
             '↔️ 邊界反彈：所有角色碰到邊界都會反彈',
             '🔊 請開啟聲音！本遊戲有完整音效'
           ],
@@ -212,7 +212,7 @@ export default {
             { title: '🎮 操作與血量', text: '使用 <b>WASD</b>（支援斜向）或右下角<b>搖桿</b>控制蛇的移動。<br><br>左上角 <b>❤️ 愛心</b>是血量，共 6 顆。被幽靈撞到會扣 1 HP，歸零即死亡。' },
             { title: '🍎 食物與分數', text:  '吃掉金色光球可獲得 <b>+10 分</b>，蛇身會變長、速度上升。<br><br>每 <b>100 分</b>會有里程碑音效提醒。<br>分數越高，幽靈數量會增加（每 50 分多 1 隻），上限 8 隻。' },
             { title: '👻 幽靈與護盾', text: '三種幽靈：<br>🟦 藍圓 <b>Wanderer</b> — 隨機巡邏<br>🟥 紅三角 <b>Chaser</b> — 追擊你，被護盾彈開會暈眩<br>🟪 紫菱 <b>Ambusher</b> — 預判你的前進方向攔截<br><br>🛡️ 撿到藍色護盾道具可彈開幽靈一次，持續 5 秒。' },
-            { title: '⚡ 陷阱與補血', text: '🔴 四角紅色尖刺：碰到會 <b>-15 分</b>、尾巴截掉 3 節，有 1 秒冷卻。<br><br>💚 綠色十字 <b>補血包</b>：會逃跑，撿到恢復 <b>+1 HP</b>，12 秒後消失。' },
+            { title: '⚡ 陷阱與補血', text: '🔴 四角落陷阱：碰到會 <b>-15 分</b>、尾巴截掉 3 節，有 1 秒冷卻。<br><br>💚 綠色十字 <b>補血包</b>：會逃跑，撿到恢復 <b>+1 HP</b>，12 秒後消失。' },
             { title: '↔️ 邊界反彈', text: '蛇、幽靈、補血包碰到邊界都會 <b>反彈</b>，不會死亡。<br><br>遊戲沒有暫停功能，請在開始前做好準備！<br><br>🎯 目標：吃越多食物分數越高，存活越久！' }
           ]
         },
@@ -224,7 +224,7 @@ export default {
             '👻 Ghosts: Blue patrol, Red chase, Purple ambush. Hits = -1 HP',
             '🛡️ Shield: Blue item, deflects ghosts once, 5s duration',
             '💚 Heal: Green cross, runs away, restores +1 HP',
-            '⚡ Spikes: Corner traps, -15 score, cut 3 tail segments',
+            '⚡ Corner Spikes: Corner traps, -15 score, cut 3 tail segments',
             '↔️ Walls: Everything bounces off walls',
             '🔊 Enable sound! This game has full audio'
           ],
@@ -248,7 +248,7 @@ export default {
             { title: '🎮 Controls & HP', text: 'Use <b>WASD</b> (diagonal supported) or the <b>joystick</b> to move.<br><br>Top-left <b>❤️ hearts</b> = HP (6 total). Ghost hits cost 1 HP. Zero HP = death.' },
             { title: '🍎 Food & Score', text: 'Gold orbs give <b>+10 score</b>, lengthen your snake, and increase speed.<br><br>Every <b>100 points</b> triggers a milestone sound.<br>Higher score = more ghosts (+1 per 50 score, max 8).' },
             { title: '👻 Ghosts & Shield', text: 'Three types:<br>🟦 Blue <b>Wanderer</b> — random patrol<br>🟥 Red <b>Chaser</b> — pursues you, stunned by shield<br>🟪 Purple <b>Ambusher</b> — predicts your path<br><br>🛡️ Blue shield item deflects ghosts once, lasts 5s.' },
-            { title: '⚡ Traps & Heal', text: '🔴 Red corner spikes: <b>-15 score</b>, cut 3 tail segments, 1s cooldown.<br><br>💚 Green <b>health pack</b>: runs away from you, restores <b>+1 HP</b>, vanishes after 12s.' },
+            { title: '⚡ Traps & Heal', text: '🔴 Red corner traps: <b>-15 score</b>, cut 3 tail segments, 1s cooldown.<br><br>💚 Green <b>health pack</b>: runs away from you, restores <b>+1 HP</b>, vanishes after 12s.' },
             { title: '↔️ Wall Bounce', text: 'Snake, ghosts, and health packs all <b>bounce off walls</b>. No wall-death.<br><br>No pause feature — be ready before you start!<br><br>🎯 Goal: Eat food, survive, get the highest score!' }
           ]
         }
@@ -406,16 +406,18 @@ export default {
     },
 
     checkEat() {
-      const h = this.snake[0]
-      if (!h) return
+      if (this.snake.length === 0) return
       for (let i = 0; i < this.foods.length; i++) {
-        if (Math.hypot(h.x - this.foods[i].x, h.y - this.foods[i].y) < 16) {
-          this.score += 10
-          this.sound.playEat()
-          const tail = this.snake[this.snake.length - 1]
-          this.snake.push({ x: tail.x, y: tail.y })
-          this.foods[i] = this.spawnFood()
-          this.speed = Math.min(5, this.speed + 0.2)
+        for (const seg of this.snake) {
+          if (Math.hypot(seg.x - this.foods[i].x, seg.y - this.foods[i].y) < 16) {
+            this.score += 10
+            this.sound.playEat()
+            const tail = this.snake[this.snake.length - 1]
+            this.snake.push({ x: tail.x, y: tail.y })
+            this.foods[i] = this.spawnFood()
+            this.speed = Math.min(5, this.speed + 0.2)
+            break
+          }
         }
       }
     },
@@ -594,13 +596,15 @@ export default {
     },
 
     checkShieldPickup() {
-      const h = this.snake[0]
-      if (!h || !this.shieldPickup) return
-      if (Math.hypot(h.x - this.shieldPickup.x, h.y - this.shieldPickup.y) < 16) {
-        this.shieldActive = true
-        this.shieldEndTime = this.lastFrameTime + 5000
-        this.shieldPickup = null
-        this.sound.playPickupShield()
+      if (!this.shieldPickup) return
+      for (const seg of this.snake) {
+        if (Math.hypot(seg.x - this.shieldPickup.x, seg.y - this.shieldPickup.y) < 16) {
+          this.shieldActive = true
+          this.shieldEndTime = this.lastFrameTime + 5000
+          this.shieldPickup = null
+          this.sound.playPickupShield()
+          return
+        }
       }
     },
 

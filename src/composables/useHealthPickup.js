@@ -112,11 +112,11 @@ export function useHealthPickup() {
 
   function checkPickup(snake) {
     if (!pickup.active) return false
-    const h = snake[0]
-    if (!h) return false
-    if (Math.hypot(h.x - pickup.x, h.y - pickup.y) < 20) {
-      pickup.active = false
-      return true
+    for (const seg of snake) {
+      if (Math.hypot(seg.x - pickup.x, seg.y - pickup.y) < 20) {
+        pickup.active = false
+        return true
+      }
     }
     return false
   }
